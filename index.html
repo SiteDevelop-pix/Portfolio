@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YonoDev | Створення сайтів у Дніпрі</title>
+    
+    <!-- Сучасні шрифти та іконки -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Базові налаштування та плавний скролл */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #060913;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Кастомний глянцевий скроллбар */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060913;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #6366f1, #d946ef);
+            border-radius: 10px;
+            border: 2px solid #060913;
+        }
+
+        /* Навігація */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(6, 9, 19, 0.7);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #818cf8, #e879f9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        nav a:hover {
+            color: #818cf8;
+            transform: translateY(-1px);
+        }
+
+        /* Головний екран */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 20px 60px 20px;
+            background: radial-gradient(circle at 50% 40%, rgba(99, 102, 241, 0.15) 0%, rgba(6, 9, 13, 0) 60%);
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        /* Фікс помилки в CSS градієнті */
+        .hero h1 span {
+            background: linear-gradient(135deg, #818cf8, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #9ca3af;
+            max-width: 650px;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        /* Синя Кнопка Telegram */
+        .btn {
+            position: relative;
+            background: linear-gradient(135deg, #24a1de, #1d72b8);
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 20px rgba(36, 161, 222, 0.3);
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(36, 161, 222, 0.6);
+        }
+
+        /* Секції */
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 38px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 60px;
+            letter-spacing: -1px;
+        }
+
+        /* 3D КАРТКИ ПОРТФОЛІО */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 40px;
+            perspective: 1000px;
+        }
+
+        .project-card {
+            background: rgba(30, 41, 59, 0.4);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) rotateX(4deg) rotateY(-4deg);
+            border-color: rgba(129, 140, 248, 0.6);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15), 0 0 25px rgba(217, 70, 239, 0.1);
+        }
+
+        /* Нове гарне прев'ю у вигляді вікна браузера */
+        .project-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            background-color: #0d1324;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .browser-header {
+            height: 28px;
+            background: rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 6px;
+        }
+
+        .browser-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .project-card:hover .browser-dot:nth-child(1) { background: #ef4444; }
+        .project-card:hover .browser-dot:nth-child(2) { background: #f59e0b; }
+        .project-card:hover .browser-dot:nth-child(3) { background: #10b981; }
+
+        .browser-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 44px;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover .browser-content {
+            transform: scale(1.1);
+        }
+
+        .project-card h3 {
+            font-size: 22px;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-card h3 i {
+            font-size: 16px;
+            color: #818cf8;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover h3 i {
+            transform: translate(3px, -3px);
+        }
+
+        .project-card p {
+            color: #9ca3af;
+            font-size: 15px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Послуги / Переваги */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #818cf8;
+        }
+
+        .feature-card i {
+            font-size: 36px;
+            background: linear-gradient(135deg, #818cf8, #d946ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: #9ca3af;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Сітка тарифів */
+        .price-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.5) 100%);
+            border: 2px solid rgba(129, 140, 248, 0.2);
+            padding: 40px 30px;
+            border-radius: 28px;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .price-box:hover {
+            border-color: #d946ef;
+            box-shadow: 0 0 30px rgba(217, 70, 239, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .price-box.premium {
+            border-color: #6366f1;
+            position: relative;
+        }
+        
+        .price-box.premium::before {
+            content: 'Популярно';
+            position: absolute;
+            top: -15px; right: 25px;
+            background: linear-gradient(135deg, #6366f1, #d946ef);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .price-box h3 {
+            font-size: 24px;
+            margin: 0 0 10px 0;
+        }
+
+        .price-box p {
+            color: #9ca3af;
+            font-size: 14px;
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+
+        .price-tag {
+            font-size: 38px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 25px;
+        }
+
+        .price-tag span {
+            font-size: 16px;
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .price-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .price-list li {
+            font-size: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-list li i {
+            color: #10b981;
+        }
+
+        /* Контакти */
+        .contacts {
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        /* Синя кнопка Telegram в контактах */
+        .social-icon {
+            padding: 16px 36px;
+            background: linear-gradient(135deg, #24a1de, #1d72b8);
+            border-radius: 16px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(36, 161, 222, 0.2);
+            cursor: pointer;
+            border: none;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(36, 161, 222, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #4b5563;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+
+        /* КАСТOmni МОДАЛЬНІ ВІКНА (Стиль Telegram модалок) */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(3, 5, 11, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-window {
+            background: #17212b; /* Колір нічної теми ТГ */
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 420px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-window {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 15px;
+            background: transparent;
+            border: none;
+            color: #708499;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: #fff; }
+
+        .modal-window h3 {
+            margin: 0 0 15px 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .modal-window p {
+            color: #708499;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0 0 25px 0;
+        }
+
+        /* Стильне поле вводу */
+        .modal-input-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: #242f3d;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            text-align: left;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-input:focus {
+            border-color: #5288c1;
+            box-shadow: 0 0 10px rgba(82, 136, 193, 0.3);
+        }
+
+        /* Синя ТГ кнопка у вікні */
+        .modal-btn {
+            width: 100%;
+            background: #5288c1;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .modal-btn:hover { background: #4677a8; }
+        .modal-btn:active { transform: scale(0.98); }
+
+        /* Кастомне спливаюче сповіщення (Уведомление) */
+        .custom-toast {
+            position: fixed;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #242f3d;
+            border-left: 4px solid #5288c1;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #fff;
+            pointer-events: none;
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+        }
+
+        .custom-toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .custom-toast.error { border-left-color: #ec3942; }
+        .custom-toast.success { border-left-color: #34c759; }
+
+        /* Мобільна адаптивність */
+        @media (max-width: 768px) {
+            .nav-container { padding: 15px; }
+            nav { gap: 15px; }
+            nav a { font-size: 13px; }
+            .hero h1 { font-size: 38px; }
+            .hero p { font-size: 16px; }
+            section { padding: 60px 20px; }
+            section h2 { font-size: 28px; margin-bottom: 40px; }
+            .portfolio-grid { grid-template-columns: 1fr; gap: 25px; }
+            .project-preview { height: 180px; }
+            .price-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Навігація -->
+    <header>
+        <div class="nav-container">
+            <div class="logo"><i class="fa-solid fa-cubes" style="color: #818cf8; font-size: 22px;"></i> YonoDev</div>
+            <nav>
+                <a href="#about">Переваги</a>
+                <a href="#portfolio">Макети</a>
+                <a href="#price">Вартість</a>
+                <a href="#contacts">Контакти</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Головний екран -->
+        <section class="hero">
+            <h1>Привіт, я Гліб <span>(YonoDev)</span></h1>
+            <p>Створюю швидкі, сучасні односторінкові сайти з готовим функціоналом для розвитку вашого бізнесу в Дніпрі.</p>
+            <button class="btn telegram-trigger"><i class="fa-brands fa-telegram"></i> Написати мені</button>
+        </section>
+
+        <!-- Портфоліо -->
+        <section id="portfolio">
+            <h2>Макети</h2>
+            <div class="portfolio-grid">
+                
+                <!-- Картка 1: СТО Tech-Service -->
+                <a href="https://sitedevelop-pix.github.io/Tech-Service/" target="_blank" class="project-card">
+                    <div class="project-preview">
+                        <div class="browser-header">
+                            <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-content">
+                            <i class="fa-solid fa-screwdriver-wrench" style="color: #6366f1;"></i>
+                        </div>
+                    </div>
+                    <h3>Tech-Service <i class="fa-solid fa-arrow-up-right-from-square"></i></h3>
+                    <p>Сучасний та інформативний сайт для СТО. Зручний інтерфейс, адаптивний дизайн та повний опис послуг автосервісу.</p>
+                </a>
+
+                <!-- Картка 2: Грузинська пекарня -->
+                <a href="https://sitedevelop-pix.github.io/Pekarna/" target="_blank" class="project-card">
+                    <div class="project-preview">
+                        <div class="browser-header">
+                            <div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div>
+                        </div>
+                        <div class="browser-content">
+                            <i class="fa-solid fa-bread-slice" style="color: #f59e0b;"></i>
+                        </div>
+                    </div>
+                    <h3>Грузинська Пекарня <i class="fa-solid fa-arrow-up-right-from-square"></i></h3>
+                    <p>Атмосферний односторінковий сайт для пекарні. Спрямований на залучення локальних клієнтів, демонстрацію меню та випічки.</p>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- Переваги -->
+        <section id="about">
+            <h2>Що ви отримуєте</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <h3>Сучасний дизайн</h3>
+                    <p>Якісний та чистий код, гарні візуальні ефекти та швидке завантаження сторінок з будь-якого пристрою.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-sliders"></i>
+                    <h3>Готовий функціонал</h3>
+                    <p>Робочі форми для заявок, інтерактивна карта вашого закладу в Дніпрі та кнопки швидкого зв'язку.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-rocket"></i>
+                    <h3>Потік клієнтів</h3>
+                    <p>Головне завдання сайту — просто та зрозуміло розповісти про ваші послуги та перетворити відвідувача на покупця.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ціни -->
+        <section id="price">
+            <h2>Вартість розробки (до 4000 грн)</h2>
+            <div class="price-container">
+                
+                <!-- Варіант 1 -->
+                <div class="price-box">
+                    <div>
+                        <h3>Варіант «Готовий код»</h3>
+                        <p>Ідеально, если у вас вже є свій хостинг або ви хочете налаштувати його самостійно.</p>
+                        <div class="price-tag">до 2000 <span>грн</span></div>
+                    </div>
+                    <ul class="price-list">
+                        <li><i class="fa-solid fa-circle-check"></i> Повністю готовий працюючий сайт</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Дизайн під ваш бізнес</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Адаптація під смартфони</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Передача всіх вихідних файлів</li>
+                    </ul>
+                </div>
+
+                <!-- Варіант 2 -->
+                <div class="price-box premium">
+                    <div>
+                        <h3>Варіант «Під ключ з хостингом»</h3>
+                        <p>Повна розробка разом із реєстрацією та налаштуванням місця для сайту в інтернеті.</p>
+                        <div class="price-tag">до 4000 <span>грн</span></div>
+                    </div>
+                    <ul class="price-list">
+                        <li><i class="fa-solid fa-circle-check"></i> Все, що входить до першого варіанту</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Купівля та налаштування хостингу</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Запуск сайту за посиланням у мережі</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Повна готовність до прийому клієнтів</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Контакти -->
+        <section id="contacts" class="contacts">
+            <h2>Обговорити проект</h2>
+            <p style="color: #9ca3af; font-size: 18px; max-width: 600px; margin: 0 auto 30px auto;">Маєте бізнес у Дніпрі та потрібен крутий сайт? Натисніть кнопку нижче, щоб відразу відкрити чат зі мною в Telegram.</p>
+            
+            <div class="social-links">
+                <button class="social-icon telegram-trigger">
+                    <i class="fa-brands fa-telegram"></i> Написати в Telegram
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 YonoDev. Всі права захищені. Створення сайтів у м. Дніпро.
+    </footer>
+
+    <!-- Кастомне модальне вікно для введення телефону -->
+    <div class="modal-overlay" id="phoneModal">
+        <div class="modal-window">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <h3>Надіслати заявку</h3>
+            <p>Введіть ваш номер телефону українського оператора. Я зв'яжуся з вами найближчим часом.</p>
+            <div class="modal-input-wrapper">
+                <input type="text" class="modal-input" id="phoneInputField" value="+380 " maxlength="15">
+            </div>
+            <button class="modal-btn" id="submitPhoneBtn">Надіслати</button>
+        </div>
+    </div>
+
+    <!-- Кастомне спливаюче сповіщення -->
+    <div class="custom-toast" id="customToast">
+        <i id="toastIcon" class="fa-solid"></i>
+        <span id="toastText">Повідомлення</span>
+    </div>
+
+    <!-- Логіка роботи скриптів -->
+    <script>
+        const modalOverlay = document.getElementById('phoneModal');
+        const phoneInput = document.getElementById('phoneInputField');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const submitPhoneBtn = document.getElementById('submitPhoneBtn');
+        const customToast = document.getElementById('customToast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastText = document.getElementById('toastText');
+
+        // Відкриття вікна при натисканні на кнопки
+        document.querySelectorAll('.telegram-trigger').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                modalOverlay.classList.add('active');
+                // Фокусуємось на інпуті і переміщуємо курсор в кінець рядка
+                phoneInput.focus();
+                setTimeout(() => {
+                    phoneInput.setSelectionRange(phoneInput.value.length, phoneInput.value.length);
+                }, 50);
+            });
+        });
+
+        // Закриття вікна
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+        });
+
+        // Забороняємо користувачу випадково стерти "+380 "
+        phoneInput.addEventListener('input', function() {
+            if (!this.value.startsWith('+380 ')) {
+                this.value = '+380 ';
+            }
+        });
+
+        // Функція відображення кастомного красивого сповіщення
+        function showToast(text, type = 'success') {
+            toastText.textContent = text;
+            customToast.className = 'custom-toast active ' + type;
+            
+            if (type === 'success') {
+                toastIcon.className = 'fa-solid fa-circle-check';
+                toastIcon.style.color = '#34c759';
+            } else {
+                toastIcon.className = 'fa-solid fa-circle-exclamation';
+                toastIcon.style.color = '#ec3942';
+            }
+
+            // Автоматично ховаємо через 4 секунди
+            setTimeout(() => {
+                customToast.classList.remove('active');
+            }, 4000);
+        }
+
+        // Обробка відправки форми
+        submitPhoneBtn.addEventListener('click', function() {
+            let val = phoneInput.value;
+            // Прибираємо пробіли, дефіси та дужки для перевірки чистого коду
+            let cleanPhone = val.replace(/[\s\-()]/g, '');
+
+            // Валідація довжини (+380 та 9 цифр разом = 13 символів)
+            if (cleanPhone.length !== 13) {
+                showToast("Будь ласка, введіть повний номер телефону!", "error");
+                return;
+            }
+
+            // Закриваємо модалку вводу
+            modalOverlay.classList.remove('active');
+
+            // Налаштування Телеграм Бота
+            const botToken = "8488725757:AAEiM2ekb_Br93wisl4OT3ePd89JsB2GtW4";
+            const chatId = "5285775569";
+            const message = `🔔 Нова заявка з сайту YonoDev!\n📱 Телефон: ${cleanPhone}`;
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            // Відправка запиту
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: chatId, text: message })
+            })
+            .then(response => {
+                if (response.ok) {
+                    showToast("Очікуйте, ми напишемо вам в найближчий час.", "success");
+                    // Скидаємо поле до стандартного значення
+                    phoneInput.value = "+380 ";
+                } else {
+                    showToast("Помилка відправки бота. Спробуйте пізніше.", "error");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast("Помилка мережі. Перевірте з'єднання.", "error");
+            });
+        });
+
+        // Дозволяємо відправку по кнопці Enter на клавіатурі всередині інпуту
+        phoneInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                submitPhoneBtn.click();
+            }
+        });
+    </script>
+
+</body>
+</html>
