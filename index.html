@@ -112,7 +112,6 @@
             line-height: 1.1;
         }
 
-        /* Фікс помилки в CSS градієнті */
         .hero h1 span {
             background: linear-gradient(135deg, #818cf8, #d946ef);
             -webkit-background-clip: text;
@@ -195,7 +194,7 @@
             box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15), 0 0 25px rgba(217, 70, 239, 0.1);
         }
 
-        /* Нове гарне прев'ю у вигляді вікна браузера */
+        /* Прев'ю у вигляді вікна браузера */
         .project-preview {
             width: 100%;
             height: 200px;
@@ -445,7 +444,7 @@
             font-size: 14px;
         }
 
-        /* КАСТOmni МОДАЛЬНІ ВІКНА (Стиль Telegram модалок) */
+        /* КАСТОМНІ МОДАЛЬНІ ВІКНА (Стиль Telegram) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -466,7 +465,7 @@
         }
 
         .modal-window {
-            background: #17212b; /* Колір нічної теми ТГ */
+            background: #17212b; /* Колір нічної теми Telegram */
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
             width: 90%;
@@ -509,7 +508,6 @@
             margin: 0 0 25px 0;
         }
 
-        /* Стильне поле вводу */
         .modal-input-wrapper {
             position: relative;
             margin-bottom: 25px;
@@ -535,7 +533,6 @@
             box-shadow: 0 0 10px rgba(82, 136, 193, 0.3);
         }
 
-        /* Синя ТГ кнопка у вікні */
         .modal-btn {
             width: 100%;
             background: #5288c1;
@@ -551,8 +548,9 @@
 
         .modal-btn:hover { background: #4677a8; }
         .modal-btn:active { transform: scale(0.98); }
+        .modal-btn:disabled { background: #3b4b5a; color: #708499; cursor: not-allowed; }
 
-        /* Кастомне спливаюче сповіщення (Уведомление) */
+        /* Кастомні спливаючі сповіщення */
         .custom-toast {
             position: fixed;
             bottom: 30px; left: 50%;
@@ -663,7 +661,7 @@
                 <div class="feature-card">
                     <i class="fa-solid fa-laptop-code"></i>
                     <h3>Сучасний дизайн</h3>
-                    <p>Якісний та чистий код, гарні візуальні ефекти та швидке завантаження сторінок з будь-якого пристрою.</p>
+                    <p>Якісний та чистий код, гарні візуальні ефекти та швидке завантаження сторінок з будь-какого пристрою.</p>
                 </div>
                 <div class="feature-card">
                     <i class="fa-solid fa-sliders"></i>
@@ -687,7 +685,7 @@
                 <div class="price-box">
                     <div>
                         <h3>Варіант «Готовий код»</h3>
-                        <p>Ідеально, если у вас вже є свій хостинг або ви хочете налаштувати його самостійно.</p>
+                        <p>Ідеально, якщо у вас вже є свій хостинг або ви хочете налаштувати його самостійно.</p>
                         <div class="price-tag">до 2000 <span>грн</span></div>
                     </div>
                     <ul class="price-list">
@@ -719,7 +717,7 @@
         <!-- Контакти -->
         <section id="contacts" class="contacts">
             <h2>Обговорити проект</h2>
-            <p style="color: #9ca3af; font-size: 18px; max-width: 600px; margin: 0 auto 30px auto;">Маєте бізнес у Дніпрі та потрібен крутий сайт? Натисніть кнопку нижче, щоб залишити заявку.</p>
+            <p style="color: #9ca3af; font-size: 18px; max-width: 600px; margin: 0 auto 30px auto;">Маєте бізнес у Дніпрі та потрібен крутий сайт? Натисніть кнопку нижче, щоб відразу відкрити чат зі мною в Telegram.</p>
             
             <div class="social-links">
                 <button class="social-icon telegram-trigger">
@@ -767,8 +765,8 @@
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 modalOverlay.classList.add('active');
-                // Фокусуємось на інпуті і переміщуємо курсор в кінець рядка
                 phoneInput.focus();
+                // Ставимо курсор у самий кінець рядка (після "+380 ")
                 setTimeout(() => {
                     phoneInput.setSelectionRange(phoneInput.value.length, phoneInput.value.length);
                 }, 50);
@@ -784,14 +782,14 @@
             if (e.target === modalOverlay) modalOverlay.classList.remove('active');
         });
 
-        // Забороняємо користувачу випадково стерти "+380 "
+        // Контроль того, щоб префікс "+380 " неможливо було випадково стерти
         phoneInput.addEventListener('input', function() {
             if (!this.value.startsWith('+380 ')) {
                 this.value = '+380 ';
             }
         });
 
-        // Функція відображення кастомного красивого сповіщення
+        // Показ кастомного красивого алерта
         function showToast(text, type = 'success') {
             toastText.textContent = text;
             customToast.className = 'custom-toast active ' + type;
@@ -804,7 +802,6 @@
                 toastIcon.style.color = '#ec3942';
             }
 
-            // Автоматично ховаємо через 4 секунди
             setTimeout(() => {
                 customToast.classList.remove('active');
             }, 4000);
@@ -813,46 +810,46 @@
         // Обробка відправки форми
         submitPhoneBtn.addEventListener('click', function() {
             let val = phoneInput.value;
-            // Прибираємо пробіли, дефіси та дужки для перевірки чистого коду
             let cleanPhone = val.replace(/[\s\-()]/g, '');
 
-            // Валідація довжини (+380 та 9 цифр разом = 13 символів)
             if (cleanPhone.length !== 13) {
                 showToast("Будь ласка, введіть повний номер телефону!", "error");
                 return;
             }
 
-            // Закриваємо модалку вводу
             modalOverlay.classList.remove('active');
+            
+            // Тимчасово блокуємо кнопку, щоб уникнути подвійних надсилань
+            submitPhoneBtn.disabled = true;
 
-            // Налаштування Телеграм Бота
-            const botToken = "8488725757:AAEiM2ekb_Br93wisl4OT3ePd89JsB2GtW4";
-            const chatId = "5285775569";
-            const message = `🔔 Нова заявка з сайту YonoDev!\n📱 Телефон: ${cleanPhone}`;
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            // Адреса твого захищеного сервера Node.js/Express (зміни після деплою)
+            const serverUrl = 'http://localhost:3000/api/send-lead'; 
 
-            // Відправка запиту
-            fetch(url, {
+            fetch(serverUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message })
+                body: JSON.stringify({ phone: cleanPhone })
             })
-            .then(response => {
-                if (response.ok) {
+            .then(async response => {
+                const data = await response.json();
+                submitPhoneBtn.disabled = false; // Розблоковуємо кнопку
+
+                if (response.ok && data.success) {
                     showToast("Очікуйте, ми напишемо вам в найближчий час.", "success");
-                    // Скидаємо поле до стандартного значення
-                    phoneInput.value = "+380 ";
+                    phoneInput.value = "+380 "; // Скидаємо значення
                 } else {
-                    showToast("Помилка відправки бота. Спробуйте пізніше.", "error");
+                    // Якщо сервер повернув помилку (наприклад, ліміт флуду), показуємо її текст
+                    showToast(data.error || "Помилка відправки.", "error");
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                submitPhoneBtn.disabled = false;
                 showToast("Помилка мережі. Перевірте з'єднання.", "error");
             });
         });
 
-        // Дозволяємо відправку по кнопці Enter на клавіатурі всередині інпуту
+        // Натискання Enter у полі введення
         phoneInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 submitPhoneBtn.click();
