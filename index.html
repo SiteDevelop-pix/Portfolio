@@ -825,21 +825,22 @@
             // Адреса твого захищеного сервера Node.js/Express (зміни після деплою)
            const serverUrl = 'https://formspree.io/f/xnjknylo';
             
-            fetch(serverUrl, {
+           fetch(serverUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone: cleanPhone })
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ 'Телефон клиента': cleanPhone }) // Formspree красиво покажет это в письме
             })
-            .then(async response => {
-                const data = await response.json();
-                submitPhoneBtn.disabled = false; // Розблоковуємо кнопку
+            .then(response => {
+                submitPhoneBtn.disabled = false; // Разблокируем кнопку
 
-                if (response.ok && data.success) {
+                if (response.ok) {
                     showToast("Очікуйте, ми напишемо вам в найближчий час.", "success");
-                    phoneInput.value = "+380 "; // Скидаємо значення
+                    phoneInput.value = "+380 "; // Скидываем значение
                 } else {
-                    // Якщо сервер повернув помилку (наприклад, ліміт флуду), показуємо її текст
-                    showToast(data.error || "Помилка відправки.", "error");
+                    showToast("Помилка відправки. Спробуйте пізніше.", "error");
                 }
             })
             .catch(error => {
@@ -847,7 +848,6 @@
                 submitPhoneBtn.disabled = false;
                 showToast("Помилка мережі. Перевірте з'єднання.", "error");
             });
-        });
 
         // Натискання Enter у полі введення
         phoneInput.addEventListener('keydown', function(e) {
