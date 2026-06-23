@@ -750,112 +750,111 @@
         <span id="toastText">Повідомлення</span>
     </div>
 
-    <!-- Логіка роботи скриптів -->
-    <script>
-        const modalOverlay = document.getElementById('phoneModal');
-        const phoneInput = document.getElementById('phoneInputField');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const submitPhoneBtn = document.getElementById('submitPhoneBtn');
-        const customToast = document.getElementById('customToast');
-        const toastIcon = document.getElementById('toastIcon');
-        const toastText = document.getElementById('toastText');
+  <script>
+    const modalOverlay = document.getElementById('phoneModal');
+    const phoneInput = document.getElementById('phoneInputField');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const submitPhoneBtn = document.getElementById('submitPhoneBtn');
+    const customToast = document.getElementById('customToast');
+    const toastIcon = document.getElementById('toastIcon');
+    const toastText = document.getElementById('toastText');
 
-        // Відкриття вікна при натисканні на кнопки
-        document.querySelectorAll('.telegram-trigger').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                modalOverlay.classList.add('active');
-                phoneInput.focus();
-                // Ставимо курсор у самий кінець рядка (після "+380 ")
-                setTimeout(() => {
-                    phoneInput.setSelectionRange(phoneInput.value.length, phoneInput.value.length);
-                }, 50);
-            });
-        });
-
-        // Закриття вікна
-        closeModalBtn.addEventListener('click', () => {
-            modalOverlay.classList.remove('active');
-        });
-
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) modalOverlay.classList.remove('active');
-        });
-
-        // Контроль того, щоб префікс "+380 " неможливо було випадково стерти
-        phoneInput.addEventListener('input', function() {
-            if (!this.value.startsWith('+380 ')) {
-                this.value = '+380 ';
-            }
-        });
-
-        // Показ кастомного красивого алерта
-        function showToast(text, type = 'success') {
-            toastText.textContent = text;
-            customToast.className = 'custom-toast active ' + type;
-            
-            if (type === 'success') {
-                toastIcon.className = 'fa-solid fa-circle-check';
-                toastIcon.style.color = '#34c759';
-            } else {
-                toastIcon.className = 'fa-solid fa-circle-exclamation';
-                toastIcon.style.color = '#ec3942';
-            }
-
+    // Відкриття вікна при натисканні на кнопки
+    document.querySelectorAll('.telegram-trigger').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            modalOverlay.classList.add('active');
+            phoneInput.focus();
+            // Ставимо курсор у самий кінець рядка (після "+380 ")
             setTimeout(() => {
-                customToast.classList.remove('active');
-            }, 4000);
+                phoneInput.setSelectionRange(phoneInput.value.length, phoneInput.value.length);
+            }, 50);
+        });
+    });
+
+    // Закриття вікна
+    closeModalBtn.addEventListener('click', () => {
+        modalOverlay.classList.remove('active');
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) modalOverlay.classList.remove('active');
+    });
+
+    // Контроль того, щоб префікс "+380 " неможливо було випадково стерти
+    phoneInput.addEventListener('input', function() {
+        if (!this.value.startsWith('+380 ')) {
+            this.value = '+380 ';
+        }
+    });
+
+    // Показ кастомного красивого алерта
+    function showToast(text, type = 'success') {
+        toastText.textContent = text;
+        customToast.className = 'custom-toast active ' + type;
+        
+        if (type === 'success') {
+            toastIcon.className = 'fa-solid fa-circle-check';
+            toastIcon.style.color = '#34c759';
+        } else {
+            toastIcon.className = 'fa-solid fa-circle-exclamation';
+            toastIcon.style.color = '#ec3942';
         }
 
-        // Обробка відправки форми
-        submitPhoneBtn.addEventListener('click', function() {
-            let val = phoneInput.value;
-            let cleanPhone = val.replace(/[\s\-()]/g, '');
+        setTimeout(() => {
+            customToast.classList.remove('active');
+        }, 4000);
+    }
 
-            if (cleanPhone.length !== 13) {
-                showToast("Будь ласка, введіть повний номер телефону!", "error");
-                return;
+    // Обробка відправки форми
+    submitPhoneBtn.addEventListener('click', function() {
+        let val = phoneInput.value;
+        let cleanPhone = val.replace(/[\s\-()]/g, '');
+
+        if (cleanPhone.length !== 13) {
+            showToast("Будь ласка, введіть повний номер телефону!", "error");
+            return;
+        }
+
+        modalOverlay.classList.remove('active');
+        
+        // Тимчасово блокуємо кнопку, щоб уникнути подвійних надсилань
+        submitPhoneBtn.disabled = true;
+
+        // Твоя ссылка на Formspree
+        const serverUrl = 'https://formspree.io/f/xnjknylo'; 
+
+        fetch(serverUrl, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ 'Телефон клієнта': cleanPhone })
+        })
+        .then(response => {
+            submitPhoneBtn.disabled = false; // Розблоковуємо кнопку
+
+            if (response.ok) {
+                showToast("Очікуйте, ми напишемо вам в найближчий час.", "success");
+                phoneInput.value = "+380 "; // Скидаємо значення
+            } else {
+                showToast("Помилка відправки. Спробуйте пізніше.", "error");
             }
-
-            modalOverlay.classList.remove('active');
-            
-            // Тимчасово блокуємо кнопку, щоб уникнути подвійних надсилань
-            submitPhoneBtn.disabled = true;
-
-            // Адреса твого захищеного сервера Node.js/Express (зміни після деплою)
-           const serverUrl = 'https://formspree.io/f/xnjknylo';
-            
-           fetch(serverUrl, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({ 'Телефон клиента': cleanPhone }) // Formspree красиво покажет это в письме
-            })
-            .then(response => {
-                submitPhoneBtn.disabled = false; // Разблокируем кнопку
-
-                if (response.ok) {
-                    showToast("Очікуйте, ми напишемо вам в найближчий час.", "success");
-                    phoneInput.value = "+380 "; // Скидываем значение
-                } else {
-                    showToast("Помилка відправки. Спробуйте пізніше.", "error");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                submitPhoneBtn.disabled = false;
-                showToast("Помилка мережі. Перевірте з'єднання.", "error");
-            });
-
-        // Натискання Enter у полі введення
-        phoneInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                submitPhoneBtn.click();
-            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            submitPhoneBtn.disabled = false;
+            showToast("Помилка мережі. Перевірте з'єднання.", "error");
         });
-    </script>
+    });
 
+    // Натискання Enter у полі введення
+    phoneInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            submitPhoneBtn.click();
+        }
+    });
+</script>
 </body>
 </html>
